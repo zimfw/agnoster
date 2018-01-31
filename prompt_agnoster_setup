@@ -1,0 +1,91 @@
+# vim:et sts=2 sw=2 ft=zsh
+#
+# A Zim version of Agnoster, a Powerline-inspired theme for Zsh.
+#
+# This theme requires a [patched Powerline
+# font](https://github.com/powerline/fonts). In addition, it looks better with
+# the [Solarized theme](https://github.com/altercation/solarized/).
+#
+# Based on the [original theme](https://github.com/agnoster/agnoster-zsh-theme),
+# on the [Oh My Zsh version of
+# Agnoster](https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/agnoster.zsh-theme),
+# and on the [Powerlevel9k theme](https://github.com/bhilburn/powerlevel9k).
+#
+# Uses the 'git-info' Zim module.
+#
+
+prompt_agnoster_main() {
+  local prompt_agnoster_retval=${?}
+  local prompt_agnoster_bg=8
+  local prompt_agnoster_current_bg
+
+  prompt_agnoster_segment() {
+    print -n "%K{${1}}"
+    if [[ -n ${prompt_agnoster_current_bg} ]]; then
+      print -n "%F{${prompt_agnoster_current_bg}}"
+    fi
+    print -n "${2}"
+    prompt_agnoster_current_bg=${1}
+  }
+
+  prompt_agnoster_end() {
+    print -n "%K{${prompt_agnoster_bg}}%F{${prompt_agnoster_current_bg}}%k%f "
+  }
+
+  prompt_agnoster_status() {
+    local segment=''
+    (( prompt_agnoster_retval )) && segment+=" %F{red}${prompt_agnoster_retval}"
+    (( UID == 0 )) && segment+=' %F{yellow}⚡'
+    (( $(jobs -l | wc -l) )) && segment+=' %F{cyan}⚙'
+    if [[ ${USER} != ${DEFAULT_USER} || -n ${SSH_CLIENT} ]]; then
+       segment+=' %F{%(!.yellow.default)}${USER}@%m'
+    fi
+    if [[ -n ${segment} ]]; then
+      prompt_agnoster_segment black "${segment} "
+    fi
+  }
+
+  prompt_agnoster_pwd() {
+    prompt_agnoster_segment blue " %F{${prompt_agnoster_bg}}%~ "
+  }
+
+  prompt_agnoster_git() {
+    if [[ -n ${git_info} ]]; then
+      prompt_agnoster_segment ${git_info[color]} " %F{${prompt_agnoster_bg}}\${(e)git_info[prompt]} "
+    fi
+  }
+
+  prompt_agnoster_status
+  prompt_agnoster_pwd
+  prompt_agnoster_git
+  prompt_agnoster_end
+}
+
+prompt_agnoster_precmd() {
+  (( ${+functions[git-info]} )) && git-info
+}
+
+prompt_agnoster_setup() {
+  autoload -Uz add-zsh-hook && add-zsh-hook precmd prompt_agnoster_precmd
+
+  prompt_opts=(cr percent sp subst)
+
+  zstyle ':zim:git-info:branch' format ' %b'
+  zstyle ':zim:git-info:commit' format '➦ %c'
+  zstyle ':zim:git-info:ahead' format ' ↑%A'
+  zstyle ':zim:git-info:behind' format ' ↓%B'
+  zstyle ':zim:git-info:stashed' format ' ⍟%S'
+  zstyle ':zim:git-info:indexed' format ' ✚'
+  zstyle ':zim:git-info:unindexed' format ' ●'
+  zstyle ':zim:git-info:action' format '  %s'
+  zstyle ':zim:git-info:clean' format 'green'
+  zstyle ':zim:git-info:dirty' format 'yellow'
+  zstyle ':zim:git-info:keys' format \
+    'prompt' '%b%c%A%B%S%i%I%s' \
+    'color' '%C%D'
+
+  PS1='${(e)$(prompt_agnoster_main)}'
+  RPS1=''
+}
+
+prompt_agnoster_setup "${@}"
