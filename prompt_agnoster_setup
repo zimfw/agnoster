@@ -15,30 +15,35 @@
 #
 
 prompt_agnoster_main() {
-  local prompt_agnoster_retval=${?}
-  local prompt_agnoster_bg=8
-  local prompt_agnoster_current_bg
+  # This runs in a subshell
+  RETVAL=${?}
+  COLOR_BG=''
 
   prompt_agnoster_segment() {
     print -n "%K{${1}}"
-    if [[ -n ${prompt_agnoster_current_bg} ]]; then
-      print -n "%F{${prompt_agnoster_current_bg}}"
-    fi
+    [[ -n ${COLOR_BG} ]] && print -n "%F{${COLOR_BG}}"
     print -n "${2}"
-    prompt_agnoster_current_bg=${1}
+    COLOR_BG=${1}
+  }
+
+  prompt_agnoster_standout_segment() {
+    print -n "%S%F{${1}}"
+    [[ -n ${COLOR_BG} ]] && print -n "%K{${COLOR_BG}}%k"
+    print -n "${2}%s"
+    COLOR_BG=${1}
   }
 
   prompt_agnoster_end() {
-    print -n "%K{${prompt_agnoster_bg}}%F{${prompt_agnoster_current_bg}}%k%f "
+    print -n "%k%F{${COLOR_BG}}%f "
   }
 
   prompt_agnoster_status() {
     local segment=''
-    (( prompt_agnoster_retval )) && segment+=" %F{red}${prompt_agnoster_retval}"
-    (( UID == 0 )) && segment+=' %F{yellow}⚡'
+    (( RETVAL )) && segment+=" %F{red}${RETVAL}"
+    (( EUID == 0 )) && segment+=' %F{yellow}⚡'
     (( $(jobs -l | wc -l) )) && segment+=' %F{cyan}⚙'
     if [[ ${USER} != ${DEFAULT_USER} || -n ${SSH_CLIENT} ]]; then
-       segment+=' %F{%(!.yellow.default)}${USER}@%m'
+       segment+=" %F{%(!.yellow.default)}${USER}@%m"
     fi
     if [[ -n ${segment} ]]; then
       prompt_agnoster_segment black "${segment} "
@@ -46,12 +51,12 @@ prompt_agnoster_main() {
   }
 
   prompt_agnoster_pwd() {
-    prompt_agnoster_segment blue " %F{${prompt_agnoster_bg}}%~ "
+    prompt_agnoster_standout_segment blue ' %~ '
   }
 
   prompt_agnoster_git() {
     if [[ -n ${git_info} ]]; then
-      prompt_agnoster_segment ${git_info[color]} " %F{${prompt_agnoster_bg}}\${(e)git_info[prompt]} "
+      prompt_agnoster_standout_segment ${git_info[color]} " ${(e)git_info[prompt]} "
     fi
   }
 
@@ -81,10 +86,10 @@ prompt_agnoster_setup() {
   zstyle ':zim:git-info:clean' format 'green'
   zstyle ':zim:git-info:dirty' format 'yellow'
   zstyle ':zim:git-info:keys' format \
-    'prompt' '%b%c%A%B%S%i%I%s' \
-    'color' '%C%D'
+      'prompt' '%b%c%A%B%S%i%I%s' \
+      'color' '%C%D'
 
-  PS1='${(e)$(prompt_agnoster_main)}'
+  PS1='$(prompt_agnoster_main)'
   RPS1=''
 }
 
