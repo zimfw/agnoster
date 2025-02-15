@@ -4,7 +4,7 @@ agnoster
 A prompt theme based on the Powerline-inspired [original agnoster] theme,
 on the [ohmyzsh version of agnoster] and on the deprecated [Powerlevel9k] theme.
 
-<img width="706" src="https://zimfw.github.io/images/prompts/eriner@2.png">
+<img width="706" src="https://zimfw.github.io/images/prompts/agnoster@2.png">
 
 What does it show?
 ------------------
