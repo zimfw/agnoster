@@ -1,8 +1,8 @@
 agnoster
 ========
 
-A prompt theme based on the Powerline-inspired [original agnoster] theme,
-on the [ohmyzsh version of agnoster] and on the deprecated [Powerlevel9k] theme.
+A prompt theme based on the Powerline-inspired [original agnoster] theme and on
+the deprecated [Powerlevel9k] theme.
 
 <img width="706" src="https://zimfw.github.io/images/prompts/agnoster@2.png">
 
@@ -67,7 +67,6 @@ Requires zimfw's [prompt-pwd] module to show the current working directory, and
 [git-info] to show git information.
 
 [original agnoster]: https://github.com/agnoster/agnoster-zsh-theme
-[ohmyzsh version of agnoster]: https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/agnoster.zsh-theme
 [Powerlevel9k]: https://github.com/bhilburn/powerlevel9k
 [venv]: https://docs.python.org/3/library/venv.html
 ['detached HEAD' state]: https://git-scm.com/docs/git-checkout#_detached_head
