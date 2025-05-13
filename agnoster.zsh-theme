@@ -37,8 +37,12 @@ _prompt_agnoster_status() {
   if (( RETVAL )) segment+=' %F{red}'${RETVAL}
   if (( EUID == 0 )) segment+=' %F{yellow}⚡'
   if (( ${#jobstates} )) segment+=' %F{cyan}⚙'
-  if [[ -n ${VIRTUAL_ENV} ]] segment+=" %F{cyan}${VIRTUAL_ENV:t}"
-  if [[ -n ${SSH_TTY} ]] segment+=" %F{%(!.yellow.default)}%n@%m"
+  if [[ -n ${VIRTUAL_ENV_PROMPT} ]]; then
+    segment+=' %F{cyan}'${VIRTUAL_ENV_PROMPT% }
+  elif [[ -n ${VIRTUAL_ENV} ]]; then
+    segment+=' %F{cyan}'${VIRTUAL_ENV:t}
+  fi
+  if [[ -n ${SSH_TTY} ]] segment+=' %F{%(!.yellow.default)}%n@%m'
   if [[ -n ${segment} ]]; then
     _prompt_agnoster_segment black ${segment}' '
   fi
