@@ -7,6 +7,16 @@ _prompt_agnoster_main() {
   # This runs in a subshell
   RETVAL=${?}
   CURRENT_BG=
+  case ${KEYMAP} in
+    vicmd)
+      SEGMENT_SEPARATOR='%S%s'
+      STANDOUT_SEGMENT_SEPARATOR='%s%S'
+      ;;
+    *)
+      SEGMENT_SEPARATOR=''
+      STANDOUT_SEGMENT_SEPARATOR=${SEGMENT_SEPARATOR}
+      ;;
+  esac
 
   _prompt_agnoster_status
   _prompt_agnoster_pwd
@@ -16,20 +26,20 @@ _prompt_agnoster_main() {
 
 _prompt_agnoster_segment() {
   print -n "%K{${1}}"
-  if [[ -n ${CURRENT_BG} ]] print -n "%F{${CURRENT_BG}}"
+  if [[ -n ${CURRENT_BG} ]] print -n "%F{${CURRENT_BG}}${SEGMENT_SEPARATOR}"
   print -n ${2}
   CURRENT_BG=${1}
 }
 
 _prompt_agnoster_standout_segment() {
   print -n "%S%F{${1}}"
-  if [[ -n ${CURRENT_BG} ]] print -n "%K{${CURRENT_BG}}%k"
+  if [[ -n ${CURRENT_BG} ]] print -n "%K{${CURRENT_BG}}${STANDOUT_SEGMENT_SEPARATOR}%k"
   print -n "${2}%s"
   CURRENT_BG=${1}
 }
 
 _prompt_agnoster_end() {
-  print -n "%k%F{${CURRENT_BG}}%f "
+  print -n "%k%F{${CURRENT_BG}}${SEGMENT_SEPARATOR}%f "
 }
 
 _prompt_agnoster_status() {
@@ -59,6 +69,12 @@ _prompt_agnoster_git() {
     _prompt_agnoster_standout_segment ${git_info[color]} ' '${(e)git_info[prompt]}' '
   fi
 }
+
+zle-keymap-select() {
+  zle reset-prompt
+  zle -R
+}
+zle -N zle-keymap-select
 
 typeset -g VIRTUAL_ENV_DISABLE_PROMPT=1
 
