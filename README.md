@@ -14,7 +14,7 @@ What does it show?
     * `⚡` when you're root.
     * `⚙` when there are background jobs.
     * Python [venv] indicator.
-    * `username@hostname` when in a ssh session.
+    * `username@hostname` when in an SSH session.
   * Working directory segment.
   * Git segment (background color varies if working tree is clean or dirty):
     * Current branch name, or commit short hash when in ['detached HEAD' state].
@@ -54,7 +54,9 @@ Use the following command to override a git-info context format:
 For detailed information about these and other git-info settings, check the
 [git-info documentation].
 
-These advanced settings must be overridden after the theme is initialized.
+These advanced settings must be defined at the bottom of your `~/.zshrc`, after
+the modules are initialized with `source ${ZIM_HOME}/init.zsh`, in order to
+override the theme defaults.
 
 Requirements
 ------------
@@ -63,8 +65,8 @@ In order for this theme to render correctly, a font with Powerline symbols is
 required. A simple way to install a font with Powerline symbols is to follow the
 [instructions here]. In addition, it looks better with the [Solarized theme].
 
-Requires zimfw's [prompt-pwd] module to show the current working directory, and
-[git-info] to show git information.
+Requires Zim Framework's [prompt-pwd] module to show the current working
+directory, and [git-info] to show git information.
 
 [original agnoster]: https://github.com/agnoster/agnoster-zsh-theme
 [Powerlevel9k]: https://github.com/bhilburn/powerlevel9k
@@ -76,4 +78,3 @@ Requires zimfw's [prompt-pwd] module to show the current working directory, and
 [Solarized theme]: https://github.com/altercation/solarized
 [prompt-pwd]: https://github.com/zimfw/prompt-pwd
 [git-info]: https://github.com/zimfw/git-info
-

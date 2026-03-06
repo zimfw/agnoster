@@ -1,6 +1,6 @@
 # vim:et sts=2 sw=2 ft=zsh
 #
-# A Zim version of Agnoster, a Powerline-inspired theme for Zsh.
+# A Zim Framework version of Agnoster, a Powerline-inspired theme for Zsh.
 #
 
 _prompt_agnoster_main() {
