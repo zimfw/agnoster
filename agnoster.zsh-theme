@@ -53,9 +53,7 @@ _prompt_agnoster_status() {
     segment+=' %F{cyan}'${VIRTUAL_ENV:t}
   fi
   if [[ -n ${SSH_TTY} ]] segment+=' %F{%(!.yellow.default)}%n@%m'
-  if [[ -n ${segment} ]]; then
-    _prompt_agnoster_segment black ${segment}' '
-  fi
+  if [[ -n ${segment} ]] _prompt_agnoster_segment black ${segment}' '
 }
 
 _prompt_agnoster_pwd() {
@@ -65,9 +63,7 @@ _prompt_agnoster_pwd() {
 }
 
 _prompt_agnoster_git() {
-  if [[ -n ${git_info} ]]; then
-    _prompt_agnoster_standout_segment ${git_info[color]} ' '${(e)git_info[prompt]}' '
-  fi
+  if [[ -n ${git_info} ]] _prompt_agnoster_standout_segment ${git_info[color]} ' '${(e)git_info[prompt]}' '
 }
 
 if (( ! ${+functions[_prompt_agnoster_keymap_select]} )); then
